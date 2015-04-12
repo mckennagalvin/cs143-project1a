@@ -43,24 +43,49 @@
 
                     // handle invalid input
                     $valid = true;
-                    for ($i = 0; $i < strlen($expression); $i++) {
-                        if (!ctype_digit($expression[$i]) &&
-                            $expression[$i] != '+' &&
-                            $expression[$i] != '-' &&
-                            $expression[$i] != '*' &&
-                            $expression[$i] != '/'
-                            )
-                            $valid = false;
+                    //check if the string was empty
+                    if ( Trim ( $expression ) === '' ){
+                        echo "Empty string";
+                        echo "<br>";
+                        $valid = false;
                     }
-                    
-                    if ($valid == false)
-                        echo "Your input string was not valid!";
-                    else {
-                        echo "Valid";
+                    //check that the characters are valid
+                    else if(!preg_match('/^[0-9\.\-\+\/\* ]+$/', $expression)){
+                        echo "Invalid character";
+                        echo "<br>";
+                        $valid = false;
                     }
-                    
-                    
-                    
+                    //checks if a floating point number is an invalid format
+                    else if(preg_match('/[^0-9]\.[^0-9]*/', $expression) || 
+                        preg_match('/\.[^0-9]/',$expression) ||
+                        preg_match('/[^0-9]\.[0-9]/', $expression) || 
+                        preg_match('/^\.[0-9]/', $expression)){
+                            echo "Invalid decimal";
+                        echo "<br>";
+                        $valid = false;
+                    }
+
+                    //check for division by zero
+                    else if(preg_match( '/\/0/', $expression)){
+                        echo "Division by zero";
+                        echo "<br>";
+                        $valid = false;
+                    }
+
+                    //check for multiple operators next to one another
+                    else if(preg_match('/[\.]{2,}/', $expression) ||
+                        preg_match('/[\-]{2,}/', $expression) ||
+                        preg_match('/[\+]{2,}/', $expression) ||
+                        preg_match('/[\*]{2,}/', $expression) ||
+                        preg_match('/[\/]{2,}/', $expression)){
+                        echo "Operators may not be adjacent to one another";
+                        echo "<br>"; 
+                        $valid = false;
+                    }
+                    if($valid == true){
+                        eval( '$result = (' . $expression . ');' );
+                        echo $result;
+                    }
                 }
             ?>
 
