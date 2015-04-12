@@ -45,8 +45,6 @@
                     $valid = true;
                     //check if the string was empty
                     if ( Trim ( $expression ) === '' ){
-                        echo "Empty string";
-                        echo "<br>";
                         $valid = false;
                     }
                     //check that the characters are valid
